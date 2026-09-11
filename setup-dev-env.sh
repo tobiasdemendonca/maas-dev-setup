@@ -121,6 +121,18 @@ setup_code() {
   fi
   echo "..done"
   echo
+
+  if [ "${MAAS_BRANCH}" != "" ]; then
+    echo "################################"
+    echo "Checking out ${MAAS_BRANCH} branch..."
+    git checkout -b ${MAAS_BRANCH} upstream/${MAAS_BRANCH}
+    echo "..done"
+
+    echo "################################"
+    echo "Updating submodules for ${MAAS_BRANCH}..."
+    git submodule update --init --recursive
+    echo "..done"
+  fi
 }
 
 make_snap_tree() {

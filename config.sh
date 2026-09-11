@@ -22,6 +22,10 @@ MAAS_CONTAINER_NAME="maas-dev"
 # your GitHub account if you haven't already https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account). 
 MAAS_GITHUB_ID=""
 
+# The upstream branch to check out after cloning, e.g. "3.7". Leave empty to stay on 
+# main for development. Use this if you are trying to debug an older release.
+MAAS_BRANCH=""  # e.g. "3.7"
+
 # The LXD project in which this installation should reside
 # Leave empty or set to "default" to use the default project
 # MAAS_LXD_PROJECT="maas-dev"
