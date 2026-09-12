@@ -15,6 +15,26 @@ if [ -z "${MAAS_GITHUB_ID}" ]; then
   exit 1
 fi
 
+# derive UBUNTU_VERSION from MAAS_BRANCH unless it was set explicitly in config.sh
+if [ -z "${UBUNTU_VERSION}" ]; then
+  case "${MAAS_BRANCH}" in
+    3.4|3.5) derived_ubuntu_version="jammy" ;;
+    3.6|3.7) derived_ubuntu_version="noble" ;;
+    3.8|"") derived_ubuntu_version="resolute" ;;
+    *) derived_ubuntu_version="" ;;
+  esac
+
+  if [ -n "${derived_ubuntu_version}" ]; then
+    UBUNTU_VERSION="${derived_ubuntu_version}"
+    echo "UBUNTU_VERSION not set, derived '${UBUNTU_VERSION}' from MAAS_BRANCH='${MAAS_BRANCH}'"
+  else
+    echo "MAAS_BRANCH='${MAAS_BRANCH}' has no known Ubuntu version mapping - set UBUNTU_VERSION explicitly in config.sh" >&2
+    exit 1
+  fi
+else
+  echo "Using UBUNTU_VERSION='${UBUNTU_VERSION}' from config.sh (overrides the value derived from MAAS_BRANCH)"
+fi
+
 # get absolute path for lxd
 maas_src=$(readlink -f ${MAAS_SRC})
 # see https://stackoverflow.com/questions/29832037/how-to-get-script-directory-in-posix-sh

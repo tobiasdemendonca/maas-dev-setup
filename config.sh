@@ -2,11 +2,10 @@
 # Configuration variables for setup-dev-env-.sh
 #
 
-# Depending on the MAAS version, that you are running,
-# you should pick the appropriate ubuntu version.
-#
-# These are currently resolute for 3.8+, noble for 3.6, 3.7, jammy for 3.4, 3.5
-UBUNTU_VERSION="resolute"
+# The Ubuntu version to run the dev container on. Leave empty to auto-derive it
+# from MAAS_BRANCH below (defaults to resolute for main). Only set this explicitly to override the derived value, or if
+# MAAS_BRANCH has no known mapping (e.g. "latest"/"edge").
+UBUNTU_VERSION=""
 
 # This assumes that your maas source should be installed next to this project, e.g.
 # $HOME/src/setup-maas-dev-env/ --> $HOME/src/maas/
