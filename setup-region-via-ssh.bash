@@ -119,7 +119,7 @@ maas admin vlan update $target_fabric_id untagged dhcp_on=True primary_rack=$tar
 echo
 echo "#############################"
 echo "Adding your hosts lxd to MAAS"
-maas admin vm-hosts create type=lxd power_address=${control_network_prefix}.1 project=maas name=maas-host
+maas admin vm-hosts create type=lxd power_address=${control_network_prefix}.1 project=${MAAS_VMHOST_LXD_PROJECT:-maas} name=${MAAS_VMHOST_NAME:-maas-host}
 
 echo
 echo "#################################################################"

@@ -289,6 +289,28 @@ devices:
         name: eth1
         network: maas-kvm
 EOF
+
+  lxc profile create maas-machine
+  cat <<EOF | lxc profile edit maas-machine
+config:
+    boot.mode: uefi-nosecureboot
+    limits.cpu: "2"
+    limits.memory: 6GiB
+description: MAAS-managed VMs on maas-kvm network
+devices:
+    eth0:
+        type: nic
+        name: eth0
+        nictype: bridged
+        parent: maas-kvm
+        boot.priority: "1"
+    root:
+        type: disk
+        path: /
+        pool: default
+        size: 8GB
+        boot.priority: "0"
+EOF
   echo "..done"
   echo
 }

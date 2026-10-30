@@ -1,0 +1,36 @@
+# cp terraform.tfvars.example terraform.tfvars
+# host_uid/host_gid can also come from the environment:
+#   TF_VAR_host_uid=$(id -u) TF_VAR_host_gid=$(id -g) terraform apply
+
+github_id = "your-github-id"
+host_uid  = 1000
+host_gid  = 1000
+
+# Uncomment to change the default for all environments, e.g. never launch
+# containers unless an environment opts in.
+# default_steps = { launch = false }
+
+environments = {
+  # id 0 gives config.sh's IPv4 ranges (10.10.0.1, 10.20.0.1, ...) and
+  # network_names keeps the legacy names. Networks that already exist must be
+  # imported first, e.g.:
+  #   terraform import 'module.env["main"].lxd_network.ctrl[0]' maas-ctrl
+  main = {
+    id       = 0
+    maas_src = "../../maas"
+    network_names = {
+      ctrl       = "maas-ctrl"
+      kvm        = "maas-kvm"
+      ipv6       = "maas-ipv6"
+      dual_stack = "maas-dual-stack"
+    }
+  }
+
+  # Networks and profiles only; flip launch to true to start the container.
+  "36" = {
+    id          = 36
+    maas_src    = "../../maas-3.6"
+    maas_branch = "3.6"
+    steps       = { launch = false }
+  }
+}

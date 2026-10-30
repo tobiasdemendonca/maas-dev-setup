@@ -1,43 +1,50 @@
 #
-# Configuration variables for setup-dev-env-.sh
+# Configuration variables for setup-dev-env.sh and the just recipes
+# (just/maas.just). Every variable can be overridden from the environment;
+# the values below are the defaults.
 #
 
 # The Ubuntu version to run the dev container on. Leave empty to auto-derive it
 # from MAAS_BRANCH below (defaults to resolute for main). Only set this explicitly to override the derived value, or if
 # MAAS_BRANCH has no known mapping (e.g. "latest"/"edge").
-UBUNTU_VERSION=""
+: "${UBUNTU_VERSION:=}"
 
 # This assumes that your maas source should be installed next to this project, e.g.
 # $HOME/src/setup-maas-dev-env/ --> $HOME/src/maas/
-MAAS_SRC="../maas"
+: "${MAAS_SRC:=../maas}"
 
 # This is the name of container MAAS will be running in
 # as well as the name for the related LXD profile
-MAAS_CONTAINER_NAME="maas-dev"
+: "${MAAS_CONTAINER_NAME:=maas-dev}"
 
 # Enter your GitHub ID so the script can automatically set up your local fork
-# and import your public ssh key from GitHub. The SSH key on your GitHub account should 
+# and import your public ssh key from GitHub. The SSH key on your GitHub account should
 # be the same as the one on your local machine (see the docs on adding an ssh key to
-# your GitHub account if you haven't already https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account). 
-MAAS_GITHUB_ID=""
+# your GitHub account if you haven't already https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+: "${MAAS_GITHUB_ID:=tobiasdemendonca}"
 
-# The upstream branch to check out after cloning, e.g. "3.7". Leave empty to stay on 
+# The upstream branch to check out after cloning, e.g. "3.7". Leave empty to stay on
 # main for development. Use this if you are trying to debug an older release.
-MAAS_BRANCH=""  # e.g. "3.7"
+: "${MAAS_BRANCH:=}"  # e.g. "3.7"
 
 # The LXD project in which this installation should reside
 # Leave empty or set to "default" to use the default project
 # MAAS_LXD_PROJECT="maas-dev"
 
+# The names of the LXD networks the dev container attaches to.
+: "${MAAS_CTRL_NETWORK:=maas-ctrl}"
+: "${MAAS_KVM_NETWORK:=maas-kvm}"
+
+# The name of the LXD profile for MAAS-managed VMs on the kvm network.
+: "${MAAS_MACHINE_PROFILE:=maas-machine}"
+
 # The netmasks for the LXD networks you would like to use
 # Note:
 #   netmasks will be set to /24 and IP_RANGEs have to end with .1 / ::1
-MAAS_CONTROL_NETWORK="maas-dev"
-MAAS_CONTROL_IP_RANGE="10.10.0.1"
-MAAS_MANAGEMENT_NETWORK="maas-dev"
-MAAS_MANAGEMENT_IP_RANGE="10.20.0.1"
-MAAS_IPV6_NETWORK="maas-ipv6"
-MAAS_IPV6_IP_RANGE="fd42:be3f:b08a:3d6c::1"
-MAAS_DUAL_STACK_NETWORK="maas-dual-stack"
-MAAS_DUAL_STACK_IPV4_RANGE="10.30.0.1"
-MAAS_DUAL_STACK_IPV6_RANGE="fd42:be3f:b08b:3d6d::1"
+: "${MAAS_CONTROL_IP_RANGE:=10.10.0.1}"
+: "${MAAS_MANAGEMENT_IP_RANGE:=10.20.0.1}"
+: "${MAAS_IPV6_NETWORK:=maas-ipv6}"
+: "${MAAS_IPV6_IP_RANGE:=fd42:be3f:b08a:3d6c::1}"
+: "${MAAS_DUAL_STACK_NETWORK:=maas-dual-stack}"
+: "${MAAS_DUAL_STACK_IPV4_RANGE:=10.30.0.1}"
+: "${MAAS_DUAL_STACK_IPV6_RANGE:=fd42:be3f:b08b:3d6d::1}"

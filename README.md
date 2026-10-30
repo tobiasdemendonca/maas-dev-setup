@@ -5,6 +5,56 @@
 To make the setup of a MAAS development environment super simple.
 Think of this as a one click installer.
 
+## Alternative: workshop + just setup (this branch)
+
+This branch adds a [Workshop](https://snapcraft.io/workshop)-based setup
+inspired by lxd-dev: the workshop is the control plane (edit, commit, run
+agents), and the MAAS dev container is plain LXD infrastructure managed by
+idempotent `just` recipes.
+
+```sh
+just setup            # workshop + LXD init + networks + profiles + container
+just workshop-shell   # shell in the workshop, in the MAAS source
+just vscode           # VS Code (Remote-SSH) in the workshop, in the MAAS source
+just maas-shell       # SSH into the dev container (works on host and in the workshop)
+just maas-bootstrap   # install & start MAAS inside the container (runs setup-region-via-ssh.bash)
+just delete-maas-dev  # tear down container, profiles and networks
+```
+
+The MAAS checkout at `MAAS_SRC` (default `../maas`) is the single source
+tree, bind-mounted into both environments:
+
+* in the workshop at `/home/workshop/maas`: edit, run git and agents here.
+  `just setup-workshop` remounts the `maas:maas-src` plug (declared on the
+  in-project SDK in `.workshop/maas/`) to `MAAS_SRC`;
+* in the dev container at `/work`: build and run MAAS here, e.g.
+  `ssh maas-dev` from the workshop.
+
+Edits made in the workshop are immediately visible in the container.
+
+Configuration stays in `config.sh` (shared with `setup-dev-env.sh`); every
+variable can also be overridden from the environment. Network, profile and
+container names default to the same values the shell script uses
+(`maas-ctrl`, `maas-kvm`, `maas-dev`, `maas-machine`), so the recipes are
+no-ops on a machine already set up by the script.
+
+Notes:
+
+* `MAAS_CONTROL_NETWORK`/`MAAS_MANAGEMENT_NETWORK` from `config.sh` were dead
+  config (the shell script hardcodes `maas-ctrl`/`maas-kvm`); they are replaced
+  by `MAAS_CTRL_NETWORK`/`MAAS_KVM_NETWORK` defaulting to the real names.
+* The container SSH key lives in `.state/ssh/maas_dev_key` and the container
+  IP in `.state/maas-dev-ip` (both gitignored). `just workshop-ssh` (run by
+  `setup-workshop` and `create-maas-dev`) writes an ssh config stanza inside
+  the workshop so `ssh maas-dev` works there; a workshop refresh resets
+  `~/.ssh`, so re-run it after refreshing by hand.
+* `just maas-bootstrap` expects the MAAS source prepared like the shell script
+  does (checked out at `MAAS_SRC`, snap tree built) and is not part of
+  `just setup`.
+* Host package installation, UFW and libvirt setup from `setup-dev-env.sh`
+  are not covered by the recipes; run the script with the relevant skip flags
+  if you need them.
+
 ## Requirements
 
 * Ubuntu (maybe Debian)

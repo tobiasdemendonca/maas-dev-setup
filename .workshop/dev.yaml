@@ -1,0 +1,21 @@
+# Workshop control-plane environment for MAAS development.
+# The workshop is where you edit, commit and run agents; the MAAS region
+# container (created by `just create-maas-dev`) is only the run target.
+name: dev
+base: ubuntu@24.04
+sdks:
+  # In-project SDK (.workshop/maas) carrying the MAAS source mount;
+  # `just setup-workshop` remounts it to MAAS_SRC from config.sh.
+  - name: project-maas
+    plugs:
+      maas-src:
+        interface: mount
+        workshop-target: /home/workshop/maas
+  - name: copilot
+    channel: latest/stable
+  - name: opencode
+    channel: latest/stable
+  - name: claude-code
+    channel: latest/stable
+  - name: vscode-remote
+  - name: omp

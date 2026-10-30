@@ -1,0 +1,14 @@
+#cloud-config
+# Rendered with envsubst into the LXD profile's user.vendor-data by
+# `just create-profiles`. Only the public key and GitHub id are expanded.
+packages:
+  - git
+  - build-essential
+  - jq
+ssh_authorized_keys:
+  - ${PUB_KEY}
+ssh_import_id:
+  - gh:${MAAS_GITHUB_ID}
+runcmd:
+  - cat /dev/zero | ssh-keygen -q -N ""
+  - loginctl enable-linger ubuntu
