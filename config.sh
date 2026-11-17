@@ -3,7 +3,7 @@
 #
 
 # The Ubuntu version to run the dev container on. Leave empty to auto-derive it
-# from MAAS_BRANCH below (defaults to resolute for main). Only set this explicitly to override the derived value, or if
+# from MAAS_BRANCH below (defaults to resolute for master). Only set this explicitly to override the derived value, or if
 # MAAS_BRANCH has no known mapping (e.g. "latest"/"edge").
 UBUNTU_VERSION=""
 
